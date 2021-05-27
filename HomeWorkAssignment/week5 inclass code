@@ -1,0 +1,13 @@
+use company;
+select 
+	person_name
+from works
+where company_name = 'FBC';
+
+select 
+	wrk.person_name,
+    emp.city
+from works as wrk
+	left join employee as emp
+		on emp.person_name = wrk.person_name
+where wrk.company_name = 'FBC'
