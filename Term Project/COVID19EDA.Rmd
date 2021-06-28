@@ -1,0 +1,402 @@
+---
+title: "COVID-19 EDA"
+author: "Rashmi Patel"
+date: "6/14/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(DataExplorer)
+library(covid19.analytics)
+```
+```{r}
+covid19=covid19.JHU.data()
+head(covid19)
+dim(covid19)
+unique(covid19$Country_Region)
+str(covid19)
+```
+```{r}
+# Checking the dimensions of the dataset
+dim(covid19)
+# Checking the column names of the dataset
+colnames(covid19)
+# Looking at the summary of the dataset
+summary(covid19)
+# Checking for data types of the columns of the dataset
+str(covid19)
+# Checking for number of columns with numeric type
+numeric_var_who=sum(sapply(covid19[,1:14],is.numeric))
+numeric_var_who
+# Checking for number of columns with character type
+char_var_who=sum(sapply(covid19[,1:14],is.character))
+char_var_who
+# Checking for column names with numeric type
+numeric_varname_who=which(sapply(covid19[,1:14],is.numeric))
+numeric_varname_who
+# Checking for column names with character type
+char_varname_who=which(sapply(covid19[,1:14],is.character))
+char_varname_who
+
+```
+```{r}
+plot_density(covid19)
+
+sum(!is.na(covid19))
+```
+
+# Extracting Covid-19 data for United States of America from the total data
+```{r}
+usa.covid=covid19%>%filter(Country_Region=="US")
+head(usa.covid,20)
+tail(usa.covid,20)
+```
+
+# Covid-19 data for each state in United States of America
+```{r}
+state.total=usa.covid%>%group_by(Province_State)%>%summarise(usa.sum=sum(Confirmed))
+sum(state.total$usa.sum)
+ggplot(state.total,aes(x=reorder(as.factor(Province_State),-usa.sum),y=usa.sum))+geom_col(fill="sky blue",col="black")+
+   theme(axis.text.x = element_text(angle = 90))+
+   labs(x="State",y="Total cases")+ggtitle("Graph for total cases for each state in United States of America")
+
+state.total%>%dplyr::select(Province_State,usa.sum)%>%arrange(desc(usa.sum))
+
+```
+
+# Covid-19 data for California by each County
+```{r}
+california=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="California")
+
+ggplot(california,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+
+   theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in California")
+
+california%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Texas by each County
+```{r}
+texas=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Texas")
+
+ggplot(texas,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+
+   theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Texas")
+
+texas%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Florida by each County
+```{r}
+florida=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Florida")
+
+ggplot(florida,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Florida")
+
+florida%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for New York by each County
+```{r}
+newyork=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="New York")
+
+ggplot(newyork,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in New York")
+
+newyork%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Illinois by each County
+```{r}
+illinois=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Illinois")
+
+ggplot(illinois,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Illinois")
+
+illinois%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Pennsylvania by each County
+```{r}
+pennsylvania=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Pennsylvania")
+
+ggplot(pennsylvania,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Pennsylvania")
+
+pennsylvania%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Georgia by each County
+```{r}
+georgia=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Georgia")
+
+ggplot(georgia,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Georgia")
+
+georgia%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Ohio by each County
+```{r}
+ohio=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Ohio")
+
+ggplot(ohio,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Ohio")
+
+ohio%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for New Jersey by each County
+```{r}
+newjersey=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="New Jersey")
+
+ggplot(newjersey,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in New Jersey")
+
+newjersey%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for North Carolina by each County
+```{r}
+northcarolina=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="North Carolina")
+
+ggplot(northcarolina,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in North Carolina")
+
+northcarolina%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for South Carolina by each County
+```{r}
+southcarolina=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="South Carolina")
+
+ggplot(southcarolina,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in South Carolina")
+
+southcarolina%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for New Mexico by each County
+```{r}
+newmexico=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="New Mexico")
+
+ggplot(newmexico,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in New Mexico")
+
+newmexico%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Alabama by each County
+```{r}
+alabama=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Alabama")
+
+ggplot(alabama,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Alabama")
+
+alabama%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Alaska by each County
+```{r}
+alaska=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Alaska")
+
+ggplot(alaska,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Alaska")
+
+alaska%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Arizona by each County
+```{r}
+arizona=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Arizona")
+
+ggplot(arizona,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Arizona")
+
+arizona%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Arkansas by each County
+```{r}
+arkansas=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Arkansas")
+
+ggplot(arkansas,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Arkansas")
+
+arkansas%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Colorado by each County
+```{r}
+colorado=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Colorado")
+
+ggplot(colorado,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Colorado")
+
+colorado%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Delaware by each County
+```{r}
+delaware=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Delaware")
+
+ggplot(delaware,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Delaware")
+
+delaware%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+usa.covid
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+# Covid-19 data for Connecticut by each County
+```{r}
+connecticut=usa.covid%>%group_by(Province_State)%>%filter(Province_State=="Connecticut")
+
+ggplot(connecticut,aes(x=reorder(as.factor(Admin2),-Confirmed),y=Confirmed))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+connecticut%>%dplyr::select(Admin2,Confirmed)%>%arrange(desc(Confirmed))
+
+```
+
+
+# Covid-19 data deaths for US 
+```{r}
+usa.deaths=usa.covid%>%group_by(Province_State)%>%summarise(Deaths=sum(Deaths))
+head(usa.deaths)
+ggplot(usa.deaths,aes(x=reorder(as.factor(Province_State),-Deaths),y=Deaths))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+usa.deaths%>%dplyr::select(Province_State,Deaths)%>%arrange(desc(Deaths))
+
+
+```
+# Covid-19 data recovery for US 
+```{r}
+usa.recovery=usa.covid%>%group_by(Province_State)%>%summarise(Recovered=sum(Recovered))
+head(usa.recovery)
+ggplot(usa.recovery,aes(x=reorder(as.factor(Province_State),-Recovered),y=Recovered))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="County",y="Total cases")+ggtitle("Graph for total cases for each county in Connecticut")
+
+usa.recovery%>%dplyr::select(Province_State,Recovered)%>%arrange(desc(Recovered))
+
+sum(is.na(usa.covid$Recovered))
+```
+# Retreiving the USA population dataset
+```{r}
+library(usmap)
+library(ggplot2)
+library(dplyr)
+
+state=read.csv("https://raw.githubusercontent.com/RashmiAPatel19/SMU-7330-DBMS/main/Term%20Project/csvData.csv",header=TRUE)
+head(state)
+dim(state)
+colnames(state)
+usa.data=usa.covid%>%group_by(Province_State)%>%summarise(Confirmed=sum(Confirmed),Deaths=sum(Deaths))
+dim(usa.data)
+df=subset(usa.data,Province_State!="Diamond Princess"&Province_State!="Grand Princess"&Province_State!="North Mariana Islands"&Province_State!="Puerto Rico"&Province_State!="Recovered"&Province_State!="Virgin Islands"&Province_State!="Guam")
+dim(df)
+
+population=data.frame(State=state$State,Population=state$Pop,ConfirmedCases=df$Confirmed,DeathsCases=df$Deaths)
+head(population)
+
+
+```
+```{r}
+ggplot(population,aes(x=reorder(as.factor(State),-Population),y=Population))+geom_col(fill="maroon",col="black")+theme(axis.text.x = element_text(angle = 90))+
+   labs(x="State",y="Population")+ggtitle("Graph for population for each ")
+
+population%>%arrange(desc(Population))
+
+
+```
